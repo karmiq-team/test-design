@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HRMS Pro - Settings</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+        }
+
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 64px;
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            z-index: 100;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .company-selector {
+            color: #64748b;
+            font-size: 14px;
+            margin-left: 8px;
+        }
+
+        .user-profile {
+            width: 40px;
+            height: 40px;
+            background: #10b981;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-right: 1px solid #e2e8f0;
+            padding-top: 64px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            overflow-y: auto;
+        }
+
+        .nav-menu {
+            padding: 24px 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 24px;
+            color: #64748b;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-item:hover {
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        .nav-item.active {
+            background: #ede9fe;
+            color: #6366f1;
+            border-right: 3px solid #6366f1;
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            padding-top: 64px;
+            min-height: 100vh;
+            background: #f8fafc;
+        }
+
+        .content-header {
+            padding: 32px 32px 24px;
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .content-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 8px;
+        }
+
+        .content-subtitle {
+            color: #64748b;
+            font-size: 16px;
+        }
+
+        .backup-btn {
+            background: #374151;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+
+        .backup-btn:hover {
+            background: #4b5563;
+        }
+
+        .settings-container {
+            display: flex;
+            gap: 32px;
+            padding: 32px;
+        }
+
+        /* Settings Categories */
+        .settings-categories {
+            width: 300px;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 24px;
+            background: white;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .category-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 16px;
+        }
+
+        .category-list {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+        }
+
+        .category-item {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .category-item:last-child {
+            border-bottom: none;
+        }
+
+        .category-item:hover {
+            background: #f8fafc;
+        }
+
+        .category-item.active {
+            background: #ede9fe;
+            color: #6366f1;
+        }
+
+        .category-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            opacity: 0.7;
+        }
+
+        /* Settings Panel */
+        .settings-panel {
+            flex: 1;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            padding: 32px;
+        }
+
+        .panel-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 32px;
+        }
+
+        .setting-group {
+            margin-bottom: 32px;
+        }
+
+        .setting-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .setting-info h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 4px;
+        }
+
+        .setting-info p {
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            width: 52px;
+            height: 28px;
+            background: #e2e8f0;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .toggle-switch.active {
+            background: #6366f1;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 12px;
+            transition: transform 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .toggle-switch.active .toggle-slider {
+            transform: translateX(24px);
+        }
+
+        /* Select Dropdown */
+        .select-dropdown {
+            padding: 10px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: white;
+            color: #374151;
+            font-size: 14px;
+            min-width: 200px;
+            cursor: pointer;
+        }
+
+        .select-dropdown:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        /* Notification Styles */
+        .notification-types {
+            display: grid;
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .notification-category {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .notification-category h5 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 16px;
+        }
+
+        .notification-options {
+            display: grid;
+            gap: 12px;
+        }
+
+        .notification-option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+        }
+
+        .notification-option label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #4b5563;
+            cursor: pointer;
+        }
+
+        /* Hidden class */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Icons */
+        .icon {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        /* Integration grid */
+        .integration-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 24px;
+        }
+
+        .integration-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .integration-card:hover {
+            border-color: #6366f1;
+            transform: translateY(-2px);
+        }
+
+        .integration-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 16px;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .integration-card h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .integration-card p {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 16px;
+        }
+
+        .connect-btn {
+            background: #6366f1;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: none;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .connect-btn:hover {
+            background: #5855eb;
+        }
+
+        .connected-btn {
+            background: #10b981;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <div class="header">
+            <div style="display: flex; align-items: center;">
+                <div class="logo">
+                    <div class="logo-icon">🏢</div>
+                    <span>HRMS Pro</span>
+                </div>
+                <div class="company-selector">TechCorp Inc. ▼</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <button class="backup-btn">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M7 4V2C7 1.45 7.45 1 8 1H16C16.55 1 17 1.45 17 2V4H20C20.55 4 21 4.45 21 5S20.55 6 20 6H19V19C19 20.1 18.1 21 17 21H7C5.9 21 5 20.1 5 19V6H4C3.45 6 3 5.55 3 5S3.45 4 4 4H7ZM9 3V4H15V3H9ZM7 6V19H17V6H7Z"/>
+                    </svg>
+                    Backup Settings
+                </button>
+                <div class="user-profile">JD</div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="nav-menu">
+                <a href="#" class="nav-item">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+                    </svg>
+                    Dashboard
+                </a>
+                <a href="#" class="nav-item">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63A2.99 2.99 0 0 0 17.1 7H16c-.8 0-1.54.37-2.01.99l-2.54 7.63H14v6h6z"/>
+                    </svg>
+                    Employees
+                </a>
+                <a href="#" class="nav-item">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    </svg>
+                    Attendance
+                </a>
+                <a href="#" class="nav-item">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    </svg>
+                    Payroll
+                </a>
+                <a href="#" class="nav-item">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M7 4V2C7 1.45 7.45 1 8 1H16C16.55 1 17 1.45 17 2V4H20C20.55 4 21 4.45 21 5S20.55 6 20 6H19V19C19 20.1 18.1 21 17 21H7C5.9 21 5 20.1 5 19V6H4C3.45 6 3 5.55 3 5S3.45 4 4 4H7Z"/>
+                    </svg>
+                    Leave Management
+                </a>
+                <a href="#" class="nav-item">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M9 11H7v6h2v-6zm4 0h-2v6h2v-6zm4 0h-2v6h2v-6zm2-7h-3V2h-2v2H8V2H6v2H3v18h18V4zm-2 16H5V9h14v11z"/>
+                    </svg>
+                    Performance
+                </a>
+                <a href="#" class="nav-item">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/>
+                    </svg>
+                    Recruitment
+                </a>
+                <a href="#" class="nav-item">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+                    </svg>
+                    Reports
+                </a>
+                <a href="#" class="nav-item active">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
+                    </svg>
+                    Settings
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="content-header">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div>
+                        <h1 class="content-title">Settings</h1>
+                        <p class="content-subtitle">Configure your HRMS system preferences</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-container">
+                <!-- Settings Categories -->
+                <div class="settings-categories">
+                    <input type="text" class="search-box" placeholder="Search settings..." id="searchSettings">
+                    
+                    <h3 class="category-title">Settings Categories</h3>
+                    <div class="category-list">
+                        <div class="category-item active" data-panel="general">
+                            <svg class="category-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
+                            </svg>
+                            General Settings
+                        </div>
+                        <div class="category-item" data-panel="user">
+                            <svg class="category-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63A2.99 2.99 0 0 0 17.1 7H16c-.8 0-1.54.37-2.01.99l-2.54 7.63H14v6h6z"/>
+                            </svg>
+                            User Management
+                        </div>
+                        <div class="category-item" data-panel="security">
+                            <svg class="category-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M10,17L6,13L7.41,11.59L10,14.17L16.59,7.58L18,9L10,17Z"/>
+                            </svg>
+                            Security & Privacy
+                        </div>
+                        <div class="category-item" data-panel="notifications">
+                            <svg class="category-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+                            </svg>
+                            Notifications
+                        </div>
+                        <div class="category-item" data-panel="integrations">
+                            <svg class="category-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.50-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/>
+                            </svg>
+                            Integrations
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Panel -->
+                <div class="settings-panel">
+                    <!-- General Settings Panel -->
+                    <div id="general-panel" class="panel-content">
+                        <h2 class="panel-title">General Settings</h2>
+                        
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Company Name</h4>
+                                <p>Set your organization's display name</p>
+                            </div>
+                            <input type="text" class="select-dropdown" value="TechCorp Inc." style="min-width: 300px;">
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Time Zone</h4>
+                                <p>Default time zone for your organization</p>
+                            </div>
+                            <select class="select-dropdown">
+                                <option>GMT+05:30 (India Standard Time)</option>
+                                <option>GMT+00:00 (UTC)</option>
+                                <option>GMT-05:00 (Eastern Time)</option>
+                                <option>GMT-08:00 (Pacific Time)</option>
+                            </select>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Date Format</h4>
+                                <p>Choose how dates are displayed throughout the system</p>
+                            </div>
+                            <select class="select-dropdown">
+                                <option>DD/MM/YYYY</option>
+                                <option>MM/DD/YYYY</option>
+                                <option>YYYY-MM-DD</option>
+                                <option>DD-MM-YYYY</option>
+                            </select>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Currency</h4>
+                                <p>Default currency for payroll and financial calculations</p>
+                            </div>
+                            <select class="select-dropdown">
+                                <option>₹ INR (Indian Rupee)</option>
+                                <option>$ USD (US Dollar)</option>
+                                <option>€ EUR (Euro)</option>
+                                <option>£ GBP (British Pound)</option>
+                            </select>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Language</h4>
+                                <p>System language preference</p>
+                            </div>
+                            <select class="select-dropdown">
+                                <option>English (US)</option>
+                                <option>English (UK)</option>
+                                <option>Hindi</option>
+                                <option>Spanish</option>
+                                <option>French</option>
+                            </select>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Working Days</h4>
+                                <p>Define default working days for the organization</p>
+                            </div>
+                            <select class="select-dropdown">
+                                <option>Monday to Friday</option>
+                                <option>Monday to Saturday</option>
+                                <option>Sunday to Thursday</option>
+                                <option>Custom Schedule</option>
+                            </select>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Auto-save Forms</h4>
+                                <p>Automatically save form data as users type</p>
+                            </div>
+                            <div class="toggle-switch active" onclick="toggleSwitch(this)">
+                                <div class="toggle-slider"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- User Management Panel -->
+                    <div id="user-panel" class="panel-content hidden">
+                        <h2 class="panel-title">User Management</h2>
+                        
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Auto-approve Registrations</h4>
+                                <p>Automatically approve new user registrations</p>
+                            </div>
+                            <div class="toggle-switch active" onclick="toggleSwitch(this)">
+                                <div class="toggle-slider"></div>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Default User Role</h4>
+                                <p>Default role assigned to new users</p>
+                            </div>
+                            <select class="select-dropdown">
+                                <option>Employee</option>
+                                <option>Manager</option>
+                                <option>HR</option>
+                                <option>Admin</option>
+                            </select>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Password Requirements</h4>
+                                <p>Minimum password strength requirements</p>
+                            </div>
+                            <select class="select-dropdown">
+                                <option>Basic (8+ characters)</option>
+                                <option>Moderate (8+ chars, numbers)</option>
+                                <option>Strong (8+ chars, numbers, symbols)</option>
+                                <option>Very Strong (12+ chars, mixed case, numbers, symbols)</option>
+                            </select>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Two-Factor Authentication</h4>
+                                <p>Require 2FA for all user accounts</p>
+                            </div>
+                            <div class="toggle-switch" onclick="toggleSwitch(this)">
+                                <div class="toggle-slider"></div>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Session Timeout</h4>
+                                <p>Automatic logout after inactivity</p>
+                            </div>
+                            <select class="select-dropdown">
+                                <option>30 minutes</option>
+                                <option>1 hour</option>
+                                <option>2 hours</option>
+                                <option>4 hours</option>
+                                <option>8 hours</option>
+                                <option>Never</option>
+                            </select>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Allow Multiple Sessions</h4>
+                                <p>Allow users to be logged in from multiple devices</p>
+                            </div>
+                            <div class="toggle-switch active" onclick="toggleSwitch(this)">
+                                <div class="toggle-slider"></div>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Email Verification Required</h4>
+                                <p>Require email verification for new accounts</p>
+                            </div>
+                            <div class="toggle-switch active" onclick="toggleSwitch(this)">
+                                <div class="toggle-slider"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Security & Privacy Panel -->
+                    <div id="security-panel" class="panel-content hidden">
+                        <h2 class="panel-title">Security & Privacy</h2>
+                        
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Data Encryption</h4>
+                                <p>Encrypt sensitive data at rest and in transit</p>
+                            </div>
+                            <div class="toggle-switch active" onclick="toggleSwitch(this)">
+                                <div class="toggle-slider"></div>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Audit Logging</h4>
+                                <p>Log all user activities and system changes</p>
+                            </div>
+                            <div class="toggle-switch active" onclick="toggleSwitch(this)">
+                                <div class="toggle-slider"></div>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Failed Login Attempts</h4>
+                                <p>Maximum failed login attempts before account lock</p>
+                            </div>
+                            <select class="select-dropdown">
+                                <option>3 attempts</option>
+                                <option>5 attempts</option>
+                                <option>10 attempts</option>
+                                <option>Unlimited</option>
+                            </select>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Account Lockout Duration</h4>
+                                <p>How long to lock accounts after failed attempts</p>
+                            </div>
+                            <select class="select-dropdown">
+                                <option>15 minutes</option>
+                                <option>30 minutes</option>
+                                <option>1 hour</option>
+                                <option>24 hours</option>
+                                <option>Until admin unlock</option>
+                            </select>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>IP Whitelist</h4>
+                                <p>Restrict access to specific IP addresses</p>
+                            </div>
+                            <div class="toggle-switch" onclick="toggleSwitch(this)">
+                                <div class="toggle-slider"></div>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Data Retention Policy</h4>
+                                <p>How long to retain user and system data</p>
+                            </div>
+                            <select class="select-dropdown">
+                                <option>1 year</option>
+                                <option>3 years</option>
+                                <option>5 years</option>
+                                <option>7 years</option>
+                                <option>Forever</option>
+                            </select>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>GDPR Compliance</h4>
+                                <p>Enable GDPR compliance features</p>
+                            </div>
+                            <div class="toggle-switch active" onclick="toggleSwitch(this)">
+                                <div class="toggle-slider"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notifications Panel -->
+                    <div id="notifications-panel" class="panel-content hidden">
+                        <h2 class="panel-title">Notifications</h2>
+                        
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Master Notifications</h4>
+                                <p>Enable or disable all notifications system-wide</p>
+                            </div>
+                            <div class="toggle-switch active" onclick="toggleSwitch(this)">
+                                <div class="toggle-slider"></div>
+                            </div>
+                        </div>
+
+                        <div class="notification-types">
+                            <div class="notification-category">
+                                <h5>📧 Email Notifications</h5>
+                                <div class="notification-options">
+                                    <div class="notification-option">
+                                        <label>
+                                            <input type="checkbox" checked> New Employee Registration
+                                        </label>
+                                        <div class="toggle-switch active" onclick="toggleSwitch(this)">
+                                            <div class="toggle-slider"></div>
+                                        </div>
+                                    </div>
+                                    <div class="notification-option">
+                                        <label>
+                                            <input type="checkbox" checked> Leave Requests
+                                        </label>
+                                        <div class="toggle-switch active" onclick="toggleSwitch(this)">
+                                            <div class="toggle-slider"></div>
+                                        </div>
+                                    </div>
+                                    <div class="notification-option">
+                                        <label>
+                                            <input type="checkbox" checked> Payroll Processing
+                                        </label>
+                                        <div class="toggle-switch active" onclick="toggleSwitch(this)">
+                                            <div class="toggle-slider"></div>
+                                        </div>
+                                    </div>
+                                    <div class="notification-option">
+                                        <label>
+                                            <input type="checkbox"> Performance Reviews Due
+                                        </label>
+                                        <div class="toggle-switch" onclick="toggleSwitch(this)">
+                                            <div class="toggle-slider"></div>
+                                        </div>
+                                    </div>
+                                    <div class="notification-option">
+                                        <label>
+                                            <input type="checkbox" checked> System Maintenance
+                                        </label>
+                                        <div class="toggle-switch active" onclick="toggleSwitch(this)">
+                                            <div class="toggle-slider"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="notification-category">
+                                <h5>📱 In-App Notifications</h5>
+                                <div class="notification-options">
+                                    <div class="notification-option">
+                                        <label>
+                                            <input type="checkbox" checked> Task Assignments
+                                        </label>
+                                        <div class="toggle-switch active" onclick="toggleSwitch(this)">
+                                            <div class="toggle-slider"></div>
+                                        </div>
+                                    </div>
+                                    <div class="notification-option">
+                                        <label>
+                                            <input type="checkbox" checked> Meeting Reminders
+                                        </label>
+                                        <div class="toggle-switch active" onclick="toggleSwitch(this)">
+                                            <div class="toggle-slider"></div>
+                                        </div>
+                                    </div>
+                                    <div class="notification-option">
+                                        <label>
+                                            <input type="checkbox" checked> Document Approvals
+                                        </label>
+                                        <div class="toggle-switch active" onclick="toggleSwitch(this)">
+                                            <div class="toggle-slider"></div>
+                                        </div>
+                                    </div>
+                                    <div class="notification-option">
+                                        <label>
+                                            <input type="checkbox"> Birthday Reminders
+                                        </label>
+                                        <div class="toggle-switch" onclick="toggleSwitch(this)">
+                                            <div class="toggle-slider"></div>
+                                        </div>
+                                    </div>
+                                    <div class="notification-option">
+                                        <label>
+                                            <input type="checkbox" checked> Attendance Alerts
+                                        </label>
+                                        <div class="toggle-switch active" onclick="toggleSwitch(this)">
+                                            <div class="toggle-slider"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="notification-category">
+                                <h5>📲 Push Notifications</h5>
+                                <div class="notification-options">
+                                    <div class="notification-option">
+                                        <label>
+                                            <input type="checkbox" checked> Urgent Announcements
+                                        </label>
+                                        <div class="toggle-switch active" onclick="toggleSwitch(this)">
+                                            <div class="toggle-slider"></div>
+                                        </div>
+                                    </div>
+                                    <div class="notification-option">
+                                        <label>
+                                            <input type="checkbox"> Daily Reports
+                                        </label>
+                                        <div class="toggle-switch" onclick="toggleSwitch(this)">
+                                            <div class="toggle-slider"></div>
+                                        </div>
+                                    </div>
+                                    <div class="notification-option">
+                                        <label>
+                                            <input type="checkbox" checked> Emergency Alerts
+                                        </label>
+                                        <div class="toggle-switch active" onclick="toggleSwitch(this)">
+                                            <div class="toggle-slider"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="notification-category">
+                                <h5>📊 Weekly/Monthly Reports</h5>
+                                <div class="notification-options">
+                                    <div class="notification-option">
+                                        <label>
+                                            <input type="checkbox" checked> Attendance Summary
+                                        </label>
+                                        <div class="toggle-switch active" onclick="toggleSwitch(this)">
+                                            <div class="toggle-slider"></div>
+                                        </div>
+                                    </div>
+                                    <div class="notification-option">
+                                        <label>
+                                            <input type="checkbox" checked> Payroll Summary
+                                        </label>
+                                        <div class="toggle-switch active" onclick="toggleSwitch(this)">
+                                            <div class="toggle-slider"></div>
+                                        </div>
+                                    </div>
+                                    <div class="notification-option">
+                                        <label>
+                                            <input type="checkbox"> Performance Metrics
+                                        </label>
+                                        <div class="toggle-switch" onclick="toggleSwitch(this)">
+                                            <div class="toggle-slider"></div>
+                                        </div>
+                                    </div>
+                                    <div class="notification-option">
+                                        <label>
+                                            <input type="checkbox" checked> Leave Balance Updates
+                                        </label>
+                                        <div class="toggle-switch active" onclick="toggleSwitch(this)">
+                                            <div class="toggle-slider"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="setting-group" style="margin-top: 32px;">
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h4>Notification Frequency</h4>
+                                    <p>How often to send non-urgent notifications</p>
+                                </div>
+                                <select class="select-dropdown">
+                                    <option>Immediately</option>
+                                    <option>Every 15 minutes</option>
+                                    <option>Hourly</option>
+                                    <option>Daily Digest</option>
+                                    <option>Weekly Summary</option>
+                                </select>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h4>Quiet Hours</h4>
+                                    <p>Suppress notifications during these hours</p>
+                                </div>
+                                <select class="select-dropdown">
+                                    <option>Disabled</option>
+                                    <option>10 PM - 8 AM</option>
+                                    <option>11 PM - 7 AM</option>
+                                    <option>9 PM - 9 AM (Weekends)</option>
+                                    <option>Custom Schedule</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Integrations Panel -->
+                    <div id="integrations-panel" class="panel-content hidden">
+                        <h2 class="panel-title">Integrations</h2>
+                        <p style="color: #64748b; margin-bottom: 24px;">Connect your HRMS with external services and applications</p>
+
+                        <div class="integration-grid">
+                            <div class="integration-card">
+                                <div class="integration-icon">
+                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="#4285f4">
+                                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                                    </svg>
+                                </div>
+                                <h4>Google Workspace</h4>
+                                <p>Sync calendar, contacts, and email</p>
+                                <button class="connected-btn">✓ Connected</button>
+                            </div>
+
+                            <div class="integration-card">
+                                <div class="integration-icon">
+                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="#0078d4">
+                                        <path d="M21.53 4.306v15.363A.53.53 0 0 1 21 20.2H3a.53.53 0 0 1-.53-.531V4.306A.53.53 0 0 1 3 3.775h18a.53.53 0 0 1 .53.531zM20.47 18.8V5.2H3.53v13.6h16.94zM6.77 17.2a.4.4 0 0 1-.4-.4v-2.4a.4.4 0 0 1 .4-.4h2.4a.4.4 0 0 1 .4.4v2.4a.4.4 0 0 1-.4.4H6.77zm0-4a.4.4 0 0 1-.4-.4v-2.4a.4.4 0 0 1 .4-.4h2.4a.4.4 0 0 1 .4.4v2.4a.4.4 0 0 1-.4.4H6.77zm0-4a.4.4 0 0 1-.4-.4V6.4a.4.4 0 0 1 .4-.4h2.4a.4.4 0 0 1 .4.4v2.4a.4.4 0 0 1-.4.4H6.77zm4 8a.4.4 0 0 1-.4-.4v-2.4a.4.4 0 0 1 .4-.4h6.4a.4.4 0 0 1 .4.4v2.4a.4.4 0 0 1-.4.4h-6.4zm0-4a.4.4 0 0 1-.4-.4v-2.4a.4.4 0 0 1 .4-.4h6.4a.4.4 0 0 1 .4.4v2.4a.4.4 0 0 1-.4.4h-6.4zm0-4a.4.4 0 0 1-.4-.4V6.4a.4.4 0 0 1 .4-.4h6.4a.4.4 0 0 1 .4.4v2.4a.4.4 0 0 1-.4.4h-6.4z"/>
+                                    </svg>
+                                </div>
+                                <h4>Microsoft 365</h4>
+                                <p>Integrate with Outlook, Teams, and SharePoint</p>
+                                <button class="connect-btn">Connect</button>
+                            </div>
+
+                            <div class="integration-card">
+                                <div class="integration-icon">
+                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="#ff5a00">
+                                        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.568 17.568a.75.75 0 01-1.037.318c-2.834-1.731-6.4-2.122-10.6-1.163a.75.75 0 01-.9-1.512c4.632-.959 8.6-.55 11.855 1.32a.75.75 0 01.682 1.037zm1.482-3.297a.937.937 0 01-1.296.4c-3.246-1.996-8.193-2.577-12.027-1.411a.938.938 0 11-.564-1.789c4.356-1.329 9.99-.7 13.489 1.604a.937.937 0 01.398 1.296zm.127-3.434c-3.892-2.31-10.31-2.523-14.032-1.396a1.125 1.125 0 11-.678-2.146c4.267-1.291 11.394-1.044 15.972 1.605a1.125 1.125 0 11-1.262 1.937z"/>
+                                    </svg>
+                                </div>
+                                <h4>Slack</h4>
+                                <p>Send notifications to Slack channels</p>
+                                <button class="connect-btn">Connect</button>
+                            </div>
+
+                            <div class="integration-card">
+                                <div class="integration-icon">
+                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="#1da1f2">
+                                        <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                                    </svg>
+                                </div>
+                                <h4>Zoom</h4>
+                                <p>Schedule and join meetings directly</p>
+                                <button class="connected-btn">✓ Connected</button>
+                            </div>
+
+                            <div class="integration-card">
+                                <div class="integration-icon">
+                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="#f56500">
+                                        <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.042-3.441.219-.937 1.404-5.965 1.404-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 01.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.357-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24.009 12.017 24c6.624 0 11.99-5.367 11.99-11.988C24.007 5.367 18.641.001 12.017.001z"/>
+                                    </svg>
+                                </div>
+                                <h4>QuickBooks</h4>
+                                <p>Sync payroll and financial data</p>
+                                <button class="connect-btn">Connect</button>
+                            </div>
+
+                            <div class="integration-card">
+                                <div class="integration-icon">
+                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="#000">
+                                        <path d="M12.036 5.339L3.797 8.35A.5.5 0 004 9.264v5.472a.5.5 0 00.203.4l7.739 5.675a.5.5 0 00.588 0l7.739-5.675a.5.5 0 00.203-.4V9.264a.5.5 0 00.203-.914l-8.239-3.011a.5.5 0 00-.4 0z"/>
+                                    </svg>
+                                </div>
+                                <h4>Custom API</h4>
+                                <p>Connect to your custom applications</p>
+                                <button class="connect-btn">Configure</button>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 32px; padding-top: 32px; border-top: 1px solid #e2e8f0;">
+                            <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 16px;">Integration Settings</h3>
+                            
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h4>Sync Frequency</h4>
+                                    <p>How often to synchronize data with connected services</p>
+                                </div>
+                                <select class="select-dropdown">
+                                    <option>Real-time</option>
+                                    <option>Every 15 minutes</option>
+                                    <option>Hourly</option>
+                                    <option>Daily</option>
+                                    <option>Manual only</option>
+                                </select>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h4>Error Notifications</h4>
+                                    <p>Notify administrators of integration failures</p>
+                                </div>
+                                <div class="toggle-switch active" onclick="toggleSwitch(this)">
+                                    <div class="toggle-slider"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle switch functionality
+        function toggleSwitch(element) {
+            element.classList.toggle('active');
+        }
+
+        // Panel switching functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const categoryItems = document.querySelectorAll('.category-item');
+            const panels = document.querySelectorAll('.panel-content');
+
+            categoryItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    // Remove active class from all category items
+                    categoryItems.forEach(cat => cat.classList.remove('active'));
+                    // Add active class to clicked item
+                    this.classList.add('active');
+
+                    // Hide all panels
+                    panels.forEach(panel => panel.classList.add('hidden'));
+                    
+                    // Show the corresponding panel
+                    const panelId = this.getAttribute('data-panel') + '-panel';
+                    const targetPanel = document.getElementById(panelId);
+                    if (targetPanel) {
+                        targetPanel.classList.remove('hidden');
+                    }
+                });
+            });
+
+            // Search functionality
+            const searchInput = document.getElementById('searchSettings');
+            const allSettingItems = document.querySelectorAll('.setting-item, .notification-category, .integration-card');
+
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase().trim();
+                
+                if (searchTerm === '') {
+                    // Show all items when search is empty
+                    allSettingItems.forEach(item => {
+                        item.style.display = '';
+                    });
+                    
+                    // Show all panels and categories normally
+                    categoryItems.forEach(cat => cat.style.display = '');
+                    return;
+                }
+
+                let hasResults = false;
+                
+                // Search through all setting items
+                allSettingItems.forEach(item => {
+                    const text = item.textContent.toLowerCase();
+                    const matches = text.includes(searchTerm);
+                    
+                    if (matches) {
+                        item.style.display = '';
+                        hasResults = true;
+                        
+                        // Show the parent panel if this item matches
+                        const panel = item.closest('.panel-content');
+                        if (panel) {
+                            panel.classList.remove('hidden');
+                        }
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+
+                // Show/hide category items based on whether their panels have visible content
+                categoryItems.forEach(cat => {
+                    const panelId = cat.getAttribute('data-panel') + '-panel';
+                    const panel = document.getElementById(panelId);
+                    
+                    if (panel) {
+                        const visibleItems = panel.querySelectorAll('.setting-item:not([style*="display: none"]), .notification-category:not([style*="display: none"]), .integration-card:not([style*="display: none"])');
+                        
+                        if (visibleItems.length > 0) {
+                            cat.style.display = '';
+                        } else {
+                            cat.style.display = 'none';
+                        }
+                    }
+                });
+
+                // If we have results, show all panels that contain matches
+                if (hasResults) {
+                    panels.forEach(panel => {
+                        const visibleItems = panel.querySelectorAll('.setting-item:not([style*="display: none"]), .notification-category:not([style*="display: none"]), .integration-card:not([style*="display: none"])');
+                        if (visibleItems.length > 0) {
+                            panel.classList.remove('hidden');
+                        } else {
+                            panel.classList.add('hidden');
+                        }
+                    });
+                    
+                    // Remove active state from category items during search
+                    categoryItems.forEach(cat => cat.classList.remove('active'));
+                }
+            });
+
+            // Checkbox synchronization with toggles in notifications
+            const notificationOptions = document.querySelectorAll('.notification-option');
+            notificationOptions.forEach(option => {
+                const checkbox = option.querySelector('input[type="checkbox"]');
+                const toggle = option.querySelector('.toggle-switch');
+                
+                if (checkbox && toggle) {
+                    // Set initial toggle state based on checkbox
+                    if (checkbox.checked) {
+                        toggle.classList.add('active');
+                    } else {
+                        toggle.classList.remove('active');
+                    }
+                    
+                    // Sync checkbox with toggle
+                    checkbox.addEventListener('change', function() {
+                        if (this.checked) {
+                            toggle.classList.add('active');
+                        } else {
+                            toggle.classList.remove('active');
+                        }
+                    });
+                    
+                    // Override toggle click to also update checkbox
+                    toggle.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        checkbox.checked = !checkbox.checked;
+                        if (checkbox.checked) {
+                            this.classList.add('active');
+                        } else {
+                            this.classList.remove('active');
+                        }
+                    });
+                }
+            });
+
+            // Integration card interactions
+            const connectBtns = document.querySelectorAll('.connect-btn');
+            connectBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Simulate connection process
+                    this.textContent = 'Connecting...';
+                    this.disabled = true;
+                    
+                    setTimeout(() => {
+                        this.textContent = '✓ Connected';
+                        this.className = 'connected-btn';
+                        this.disabled = false;
+                    }, 2000);
+                });
+            });
+
+            // Save settings functionality (simulation)
+            const dropdowns = document.querySelectorAll('.select-dropdown');
+            const toggles = document.querySelectorAll('.toggle-switch');
+            
+            dropdowns.forEach(dropdown => {
+                dropdown.addEventListener('change', function() {
+                    // Simulate saving
+                    this.style.border = '1px solid #10b981';
+                    setTimeout(() => {
+                        this.style.border = '1px solid #e2e8f0';
+                    }, 1000);
+                });
+            });
+
+            // Auto-save simulation for form inputs
+            const textInputs = document.querySelectorAll('input[type="text"]');
+            textInputs.forEach(input => {
+                let saveTimeout;
+                input.addEventListener('input', function() {
+                    clearTimeout(saveTimeout);
+                    this.style.border = '1px solid #f59e0b';
+                    
+                    saveTimeout = setTimeout(() => {
+                        this.style.border = '1px solid #10b981';
+                        setTimeout(() => {
+                            this.style.border = '1px solid #e2e8f0';
+                        }, 1000);
+                    }, 1500);
+                });
+            });
+
+            // Backup settings functionality
+            const backupBtn = document.querySelector('.backup-btn');
+            backupBtn.addEventListener('click', function() {
+                const originalText = this.innerHTML;
+                this.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 1H5C3.89 1 3 1.89 3 3V19A2 2 0 0 0 5 21H19A2 2 0 0 0 21 19V9M19 19H5V3H13V9H19Z"/></svg> Backing up...';
+                this.disabled = true;
+                
+                setTimeout(() => {
+                    this.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12L3.41 13.41L9 19L21 7L19.59 5.59L9 16.17Z"/></svg> Backup Complete';
+                    setTimeout(() => {
+                        this.innerHTML = originalText;
+                        this.disabled = false;
+                    }, 2000);
+                }, 3000);
+            });
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                // Ctrl/Cmd + K to focus search
+                if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                    e.preventDefault();
+                    searchInput.focus();
+                }
+                
+                // Escape to clear search
+                if (e.key === 'Escape' && searchInput === document.activeElement) {
+                    searchInput.value = '';
+                    searchInput.dispatchEvent(new Event('input'));
+                    searchInput.blur();
+                }
+            });
+
+            // Add search placeholder animation
+            let placeholderIndex = 0;
+            const placeholders = [
+                'Search settings...',
+                'Try "notifications"...',
+                'Try "security"...',
+                'Try "password"...',
+                'Try "email"...'
+            ];
+
+            setInterval(() => {
+                if (searchInput.value === '' && searchInput !== document.activeElement) {
+                    placeholderIndex = (placeholderIndex + 1) % placeholders.length;
+                    searchInput.placeholder = placeholders[placeholderIndex];
+                }
+            }, 3000);
+
+            // Smooth scrolling for long panels
+            const settingsPanel = document.querySelector('.settings-panel');
+            if (settingsPanel) {
+                settingsPanel.style.scrollBehavior = 'smooth';
+            }
+
+            // Add loading states for heavy operations
+            const heavyOperations = document.querySelectorAll('select[class*="dropdown"]');
+            heavyOperations.forEach(select => {
+                select.addEventListener('focus', function() {
+                    this.style.cursor = 'wait';
+                    setTimeout(() => {
+                        this.style.cursor = 'pointer';
+                    }, 300);
+                });
+            });
+
+            // Initialize tooltips for complex settings
+            const complexSettings = document.querySelectorAll('.setting-info h4');
+            complexSettings.forEach(setting => {
+                setting.style.cursor = 'help';
+                setting.addEventListener('mouseenter', function(e) {
+                    const tooltip = document.createElement('div');
+                    tooltip.style.cssText = `
+                        position: absolute;
+                        background: #1f2937;
+                        color: white;
+                        padding: 8px 12px;
+                        border-radius: 6px;
+                        font-size: 12px;
+                        z-index: 1000;
+                        max-width: 200px;
+                        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                    `;
+                    tooltip.textContent = 'Click to learn more about this setting';
+                    document.body.appendChild(tooltip);
+                    
+                    const rect = this.getBoundingClientRect();
+                    tooltip.style.left = rect.left + 'px';
+                    tooltip.style.top = (rect.top - 40) + 'px';
+                    
+                    this._tooltip = tooltip;
+                });
+                
+                setting.addEventListener('mouseleave', function() {
+                    if (this._tooltip) {
+                        document.body.removeChild(this._tooltip);
+                        this._tooltip = null;
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
